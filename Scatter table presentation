@@ -1,0 +1,45 @@
+"""1. geting the data from excel to python
+2. user to ask for a country
+3. 
+find the country match what user put
+4. only take the data for that country"""
+
+import pandas as pd
+import matplotlib.pyplot as plt
+data = pd.read_excel(r'/Users/misszhang/Desktop/Python practice/excel/covid-testing-all-observations.xlsx')
+
+
+"""
+country = pd.DataFrame(data, columns = ['Entity'])
+country = country.astype(str)
+first_words = country.apply(lambda x: x.str.split().str[0])
+# country_info = data.filter(like='Albania', axis=0)"""
+while True:
+    country_name = input('Enter country\n')
+    match_result = data['Entity'].str.contains(country_name, case = False).any()
+    if  match_result == True:
+        break    
+    elif  match_result == False:
+        print("Can't find matchable country, reinput!")   
+
+country_info = data[data['Entity'].str.contains(country_name, case=False)]
+
+graph_type = 'scatter'
+graph = pd.DataFrame(country_info, columns = ['Date', 'Cumulative total'])
+graph.plot(x = 'Date', y = 'Cumulative total', kind = graph_type, color = 'blue')
+plt.ylabel = 'Cumulative total'
+plt.title(f'Cumulative increase for {country_name}')
+plt.xticks(rotation=90)
+plt.show()
+
+
+graph_type = 'scatter'
+graph = pd.DataFrame(country_info, columns = ['Date', 'Daily change in cumulative total'])
+graph.plot(x = 'Date', y = 'Daily change in cumulative total', kind = graph_type, color = 'green')
+plt.ylabel = 'Daily change in cumulative total'
+plt.title(f'Daily change for {country_name}')
+plt.xticks(rotation=90)
+plt.show()
+
+
+
